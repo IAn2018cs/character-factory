@@ -1,0 +1,4 @@
+aichar
+gradio
+requests
+pillow

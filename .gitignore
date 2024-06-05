@@ -4,3 +4,7 @@ characters/
 .idea/
 *.iml
 
+test.py
+auth_config.txt
+config.ini
+nohub.log
