@@ -558,28 +558,11 @@ def export_as_json(
     character_name = character.name.replace(" ", "_")
     json_path = f"{base_path}{character_name}.json"
     character.export_neutral_json_file(json_path)
-    return character.export_neutral_json(), json_path
+    return character.export_neutral_json(), gr.Button(visible=False), gr.DownloadButton(value=json_path, visible=True)
 
 
-def export_character_card(
-        name, summary, personality, scenario, greeting_message, example_messages
-):
-    character_name = name.replace(" ", "_")
-    base_path = f"characters/{character_name}/"
-    os.makedirs(base_path, exist_ok=True)
-    character = aichar.create_character(
-        name=name,
-        summary=summary,
-        personality=personality,
-        scenario=scenario,
-        greeting_message=greeting_message,
-        example_messages=example_messages,
-        image_path=f"{base_path}{character_name}.png",
-    )
-    character_name = character.name.replace(" ", "_")
-    card_path = f"{base_path}{character_name}.card.png"
-    character.export_neutral_card_file(card_path)
-    return Image.open(card_path), card_path
+def download_json_file():
+    return gr.Button(visible=True), gr.DownloadButton(visible=False)
 
 
 def read_file_to_list_of_tuples(file_path: str):
@@ -724,25 +707,12 @@ def build_webui(host: str, port: int, auth_file: str):
         with gr.Tab("导出角色"):
             with gr.Column():
                 with gr.Row():
-                    export_image = gr.Image(width=512, height=512, show_download_button=False)
                     export_json_textbox = gr.JSON()
 
                 with gr.Row():
-                    export_card_button = gr.DownloadButton("Export as character card")
-                    export_json_button = gr.DownloadButton("Export as JSON")
+                    export_json_button = gr.Button("Export as JSON", visible=True)
+                    download_json_button = gr.DownloadButton("Download JSON File", visible=False)
 
-                    export_card_button.click(
-                        export_character_card,
-                        inputs=[
-                            name,
-                            summary,
-                            personality,
-                            scenario,
-                            greeting_message,
-                            example_messages,
-                        ],
-                        outputs=[export_image, export_card_button],
-                    )
                     export_json_button.click(
                         export_as_json,
                         inputs=[
@@ -753,7 +723,13 @@ def build_webui(host: str, port: int, auth_file: str):
                             greeting_message,
                             example_messages,
                         ],
-                        outputs=[export_json_textbox, export_json_button],
+                        outputs=[export_json_textbox, export_json_button, download_json_button],
+                    )
+
+                    download_json_button.click(
+                        download_json_file,
+                        inputs=None,
+                        outputs=[export_json_button, download_json_button],
                     )
 
     auths = read_file_to_list_of_tuples(auth_file)
