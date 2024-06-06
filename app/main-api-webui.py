@@ -493,7 +493,7 @@ def generate_character_avatar(
             )
     )
     print(f"character_avatar sd_prompt: {sd_prompt}")
-    return image_generate(character_name, sd_prompt, input_none(negative_prompt))
+    return image_generate(character_name, sd_prompt, input_none(negative_prompt)), sd_prompt
 
 
 def image_generate(character_name: str, prompt: str, negative_prompt: str):
@@ -697,14 +697,14 @@ def build_webui(host: str, port: int, auth_file: str):
                     with gr.Column():
                         image_input = gr.Image(width=512, height=512)
                     with gr.Column():
-                        negative_prompt = gr.Textbox(
-                            placeholder="negative prompt for stable diffusion (optional)",  # nopep8
-                            label="negative prompt",
-                        )
                         avatar_prompt = gr.Textbox(
                             placeholder="prompt for generating character avatar (If not provided, LLM will generate prompt from character description)",
                             # nopep8
                             label="stable diffusion prompt",
+                        )
+                        negative_prompt = gr.Textbox(
+                            placeholder="negative prompt for stable diffusion (optional)",  # nopep8
+                            label="negative prompt",
                         )
                         avatar_button = gr.Button(
                             "Generate avatar with stable diffusion (set character name first)"  # nopep8
@@ -719,7 +719,7 @@ def build_webui(host: str, port: int, auth_file: str):
                                 negative_prompt,
                                 avatar_prompt,
                             ],
-                            outputs=image_input,
+                            outputs=[image_input, avatar_prompt],
                         )
         with gr.Tab("导出角色"):
             with gr.Column():
