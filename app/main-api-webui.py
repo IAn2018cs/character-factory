@@ -2,7 +2,6 @@ import argparse
 import base64
 import os
 from io import BytesIO
-from typing import Optional
 
 import aichar
 import gradio as gr
@@ -30,7 +29,7 @@ supported_openai_models = [
 ]
 
 
-def generate_by_ollama(model: str, messages: list[dict]) -> Optional[str]:
+def generate_by_ollama(model: str, messages: list[dict]):
     try:
         url = f'{args.ollama_host}/api/chat'
         data = {
@@ -51,7 +50,7 @@ def generate_by_ollama(model: str, messages: list[dict]) -> Optional[str]:
         return None
 
 
-def generate_by_openai(model: str, messages: list[dict]) -> Optional[str]:
+def generate_by_openai(model: str, messages: list[dict]):
     try:
         url = f'{args.openai_host}/v1/chat/completions'
         data = {
@@ -79,7 +78,7 @@ def generate_by_openai(model: str, messages: list[dict]) -> Optional[str]:
 def generate_image_by_sd(model: str, prompt: str, negative_prompt: str,
                          steps: int, cfg: float,
                          sampler_name: str, scheduler: str,
-                         width: int, height: int) -> Optional[Image]:
+                         width: int, height: int):
     try:
         url = f'{args.sd_host}/sdapi/v1/txt2img'
         data = {
@@ -583,7 +582,7 @@ def export_character_card(
     return Image.open(card_path), card_path
 
 
-def read_file_to_list_of_tuples(file_path: str) -> Optional[list[tuple[str, str]]]:
+def read_file_to_list_of_tuples(file_path: str):
     try:
         result = []
 
