@@ -557,8 +557,8 @@ def export_as_json(
     )
     character_name = character.name.replace(" ", "_")
     json_path = f"{base_path}{character_name}.json"
-    character.export_neutral_json_file(json_path)
-    return character.export_neutral_json(), gr.Button(visible=False), gr.DownloadButton(value=json_path, visible=True)
+    character.export_json_file("sillytavern", json_path)
+    return character.export_json("sillytavern"), gr.Button(visible=False), gr.DownloadButton(value=json_path, visible=True)
 
 
 def download_json_file():
