@@ -56,10 +56,8 @@ def generate_by_openai(model: str, messages: list[dict]):
         data = {
             "model": model,
             "messages": messages,
-            "options": {
-                "frequency_penalty": 1.1,
-                "temperature": 0.8
-            },
+            "frequency_penalty": 1.1,
+            "temperature": 0.8,
             "stream": False
         }
         response = requests.post(
@@ -558,7 +556,8 @@ def export_as_json(
     character_name = character.name.replace(" ", "_")
     json_path = f"{base_path}{character_name}.json"
     character.export_json_file("sillytavern", json_path)
-    return character.export_json("sillytavern"), gr.Button(visible=False), gr.DownloadButton(value=json_path, visible=True)
+    return character.export_json("sillytavern"), gr.Button(visible=False), gr.DownloadButton(value=json_path,
+                                                                                             visible=True)
 
 
 def download_json_file():
